@@ -6,6 +6,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Profile from './pages/Profile';
 import UserProfile from './pages/UserProfile';
+import Search from './pages/Search';
 import { AuthProvider } from './context/AuthContext';
 import './App.css';
 
@@ -22,6 +23,7 @@ function App() {
               <Route path="/register" element={<Register />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/user/:userId" element={<UserProfile />} />
+              <Route path="/search" element={<Search />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </main>

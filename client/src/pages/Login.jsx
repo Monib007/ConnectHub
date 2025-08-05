@@ -36,40 +36,43 @@ const Login = () => {
   };
 
   return (
-    <div className="min-vh-100 d-flex align-items-center justify-content-center bg-light py-5">
+    <div className="min-vh-100 d-flex align-items-center justify-content-center py-5">
       <div className="container">
         <div className="row justify-content-center">
           <div className="col-md-6 col-lg-4">
-            <div className="card shadow">
+            <div className="card shadow-lg animate-fade-in-up hover-lift">
               <div className="card-body p-5">
                 <div className="text-center mb-4">
-                  <div className="bg-primary rounded d-flex align-items-center justify-content-center mx-auto mb-3" style={{width: '48px', height: '48px'}}>
-                    <span className="text-white fw-bold fs-4">C</span>
+                  <div className="bg-primary rounded d-flex align-items-center justify-content-center mx-auto mb-3 animate-pulse" style={{width: '60px', height: '60px'}}>
+                    <span className="text-white fw-bold fs-2">🌟</span>
                   </div>
-                  <h2 className="h3 fw-bold text-dark">
-                    Sign in to ConnectHub
+                  <h2 className="h3 fw-bold gradient-text mb-2">
+                    Welcome Back!
                   </h2>
                   <p className="text-muted">
-                    Or{' '}
+                    Sign in to continue your journey on ConnectHub
+                  </p>
+                  <p className="text-muted small">
+                    Don't have an account?{' '}
                     <Link
                       to="/register"
-                      className="text-decoration-none fw-medium text-primary"
+                      className="text-decoration-none fw-medium text-primary hover-scale"
                     >
-                      create a new account
+                      Create one here
                     </Link>
                   </p>
                 </div>
                 
                 <form onSubmit={handleSubmit}>
                   {error && (
-                    <div className="alert alert-danger" role="alert">
-                      {error}
+                    <div className="alert alert-danger animate-fade-in-up" role="alert">
+                      <strong>⚠️ Oops!</strong> {error}
                     </div>
                   )}
                   
                   <div className="mb-3">
-                    <label htmlFor="email" className="form-label">
-                      Email address
+                    <label htmlFor="email" className="form-label fw-medium">
+                      📧 Email address
                     </label>
                     <input
                       id="email"
@@ -78,15 +81,15 @@ const Login = () => {
                       className="form-control"
                       autoComplete="email"
                       required
-                      placeholder="Enter your email"
+                      placeholder="your.email@example.com"
                       value={formData.email}
                       onChange={handleChange}
                     />
                   </div>
                   
                   <div className="mb-4">
-                    <label htmlFor="password" className="form-label">
-                      Password
+                    <label htmlFor="password" className="form-label fw-medium">
+                      🔒 Password
                     </label>
                     <input
                       id="password"
@@ -104,9 +107,18 @@ const Login = () => {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="btn btn-primary w-100"
+                    className="btn btn-primary w-100 btn-lg hover-lift"
                   >
-                    {loading ? 'Signing in...' : 'Sign in'}
+                    {loading ? (
+                      <>
+                        <div className="spinner-border spinner-border-sm me-2" role="status"></div>
+                        Signing in...
+                      </>
+                    ) : (
+                      <>
+                        <span>🚀</span> Sign In
+                      </>
+                    )}
                   </button>
                 </form>
               </div>

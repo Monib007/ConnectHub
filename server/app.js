@@ -5,7 +5,7 @@ const logger = require('morgan');
 const cors = require('cors');
 require('dotenv').config();
 
-const connectDB = require('./db');
+const { connectDB } = require('./db');
 
 // Connect to database
 connectDB();
