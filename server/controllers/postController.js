@@ -37,13 +37,15 @@ const createPost = async (req, res) => {
       isPublic: isPublic !== undefined ? isPublic : true
     });
 
-    const populatedPost = await Post.findById(post._id)
-      .populate('author', 'name avatar')
-      .populate('likes', 'name')
-      .populate('comments.user', 'name avatar');
+    // const populatedPost = await Post.findById(post._id)
+    //   .populate('author', 'name avatar')
+    //   .populate('likes', 'name')
+    //   .populate('comments.user', 'name avatar');
 
-    console.log('Post created successfully:', populatedPost._id);
-    res.status(201).json(populatedPost);
+    // console.log('Post created successfully:', populatedPost._id);
+    console.log('Post created successfully:', post._id);
+    // res.status(201).json(populatedPost);
+    res.status(201).json(post)
   } catch (error) {
     console.error('Error creating post:', error);
     console.error('Error details:', error.message);

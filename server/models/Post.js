@@ -89,4 +89,4 @@ postSchema.virtual('shareCount').get(function() {
 // Index for search functionality
 postSchema.index({ content: 'text', tags: 'text' });
 
-module.exports = mongoose.model('Post', postSchema); 
+module.exports = mongoose.model('Post', postSchema);

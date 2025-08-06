@@ -16,8 +16,8 @@ const {
 
 // Public routes
 router.get('/', getPosts);
-router.get('/:id', getPostById);
 router.get('/user/:userId', getPostsByUser);
+router.get('/:id', getPostById);
 
 // Protected routes
 router.use(protect);
