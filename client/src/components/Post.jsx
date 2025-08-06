@@ -170,7 +170,7 @@ const Post = ({ post, onDelete, onUpdate }) => {
               {post.images.map((image, index) => (
                 <div key={index} className={post.images.length === 1 ? 'col-12' : 'col-md-6'}>
                   <img
-                    src={`/uploads/${image}`}
+                    src={`http://localhost:5000/uploads/${image}`}
                     alt={`Post image ${index + 1}`}
                     className="img-fluid rounded"
                     style={{ maxHeight: '400px', width: '100%', objectFit: 'cover' }}
