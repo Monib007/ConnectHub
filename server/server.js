@@ -8,6 +8,8 @@ const app = express()
 
 const authRoutes = require('./routes/auth')
 const postRoutes = require('./routes/post')
+const userRoutes = require('./routes/user')
+
 
 // middleware
 app.use(cors())
@@ -20,7 +22,8 @@ app.get('/', (req, res) => {
 
 
 app.use('/api/auth', authRoutes);
-app.use('/api/posts', postRoutes)
+app.use('/api/posts', postRoutes);
+app.use('/api/user', userRoutes);
 
 // mongodb connection
 mongoose.connect(process.env.MONGO_URI, {
