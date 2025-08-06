@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const { protect } = require('../middleware/auth');
+const { uploadMultiple, handleUploadError } = require('../middleware/upload');
 const {
   createPost,
   getPosts,
@@ -9,8 +11,8 @@ const {
   likePost,
   addComment,
   removeComment,
+  sharePost
 } = require('../controllers/postController');
-const { protect } = require('../middleware/auth');
 
 // Public routes
 router.get('/', getPosts);
@@ -18,10 +20,12 @@ router.get('/:id', getPostById);
 router.get('/user/:userId', getPostsByUser);
 
 // Protected routes
-router.post('/', protect, createPost);
-router.delete('/:id', protect, deletePost);
-router.put('/:id/like', protect, likePost);
-router.post('/:id/comment', protect, addComment);
-router.delete('/:id/comment/:commentId', protect, removeComment);
+router.use(protect);
+router.post('/', uploadMultiple, handleUploadError, createPost);
+router.delete('/:id', deletePost);
+router.put('/:id/like', likePost);
+router.post('/:id/comment', addComment);
+router.delete('/:id/comment/:commentId', removeComment);
+router.post('/:id/share', sharePost);
 
 module.exports = router; 

@@ -1,9 +1,24 @@
 const mongoose = require('mongoose');
 
+const commentSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
+  text: {
+    type: String,
+    required: true,
+    maxlength: [500, 'Comment cannot be more than 500 characters']
+  }
+}, {
+  timestamps: true
+});
+
 const postSchema = new mongoose.Schema({
   content: {
     type: String,
-    required: [true, 'Post content is required'],
+    required: false,
     maxlength: [1000, 'Post cannot be more than 1000 characters']
   },
   author: {
@@ -11,28 +26,49 @@ const postSchema = new mongoose.Schema({
     ref: 'User',
     required: true
   },
+  images: [{
+    type: String,
+    default: []
+  }],
   likes: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
   }],
-  comments: [{
+  comments: [commentSchema],
+  shares: [{
     user: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: true
+      ref: 'User'
     },
-    text: {
-      type: String,
-      required: true,
-      maxlength: [500, 'Comment cannot be more than 500 characters']
-    },
-    createdAt: {
+    sharedAt: {
       type: Date,
       default: Date.now
     }
-  }]
+  }],
+  isShared: {
+    type: Boolean,
+    default: false
+  },
+  originalPost: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Post'
+  },
+  tags: [{
+    type: String,
+    trim: true
+  }],
+  location: {
+    type: String,
+    trim: true
+  },
+  isPublic: {
+    type: Boolean,
+    default: true
+  }
 }, {
-  timestamps: true
+  timestamps: true,
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true }
 });
 
 // Virtual for like count
@@ -45,7 +81,12 @@ postSchema.virtual('commentCount').get(function() {
   return this.comments.length;
 });
 
-// Ensure virtuals are serialized
-postSchema.set('toJSON', { virtuals: true });
+// Virtual for share count
+postSchema.virtual('shareCount').get(function() {
+  return this.shares.length;
+});
+
+// Index for search functionality
+postSchema.index({ content: 'text', tags: 'text' });
 
 module.exports = mongoose.model('Post', postSchema); 

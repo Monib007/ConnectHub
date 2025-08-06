@@ -5,7 +5,8 @@ import {
   HeartIcon, 
   ChatBubbleLeftIcon, 
   TrashIcon,
-  HeartIcon as HeartSolidIcon 
+  ShareIcon,
+  EyeIcon
 } from '@heroicons/react/24/outline';
 import { HeartIcon as HeartFilledIcon } from '@heroicons/react/24/solid';
 import axios from 'axios';
@@ -88,6 +89,20 @@ const Post = ({ post, onDelete, onUpdate }) => {
     }
   };
 
+  const handleSharePost = async () => {
+    try {
+      const content = prompt('Add a comment to your share (optional):');
+      const response = await axios.post(`/posts/${post._id}/share`, {
+        content: content || ''
+      });
+      onUpdate(response.data);
+      alert('Post shared successfully!');
+    } catch (error) {
+      console.error('Error sharing post:', error);
+      alert('Failed to share post. Please try again.');
+    }
+  };
+
   return (
     <div className="card shadow-sm mb-4 hover-lift">
       <div className="card-body">
@@ -126,17 +141,73 @@ const Post = ({ post, onDelete, onUpdate }) => {
         {/* Post Content */}
         <div className="mb-3">
           <p className="text-dark fs-6 lh-base">{post.content}</p>
+          
+          {/* Tags */}
+          {post.tags && post.tags.length > 0 && (
+            <div className="mb-2">
+              {post.tags.map((tag, index) => (
+                <span key={index} className="badge bg-light text-dark me-1">
+                  #{tag}
+                </span>
+              ))}
+            </div>
+          )}
+          
+          {/* Location */}
+          {post.location && (
+            <div className="mb-2">
+              <small className="text-muted">
+                📍 {post.location}
+              </small>
+            </div>
+          )}
         </div>
+
+        {/* Post Images */}
+        {post.images && post.images.length > 0 && (
+          <div className="mb-3">
+            <div className="row g-2">
+              {post.images.map((image, index) => (
+                <div key={index} className={post.images.length === 1 ? 'col-12' : 'col-md-6'}>
+                  <img
+                    src={`/uploads/${image}`}
+                    alt={`Post image ${index + 1}`}
+                    className="img-fluid rounded"
+                    style={{ maxHeight: '400px', width: '100%', objectFit: 'cover' }}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Shared Post */}
+        {post.isShared && post.originalPost && (
+          <div className="mb-3 p-3 bg-light rounded">
+            <small className="text-muted d-block mb-2">
+              📤 Shared from {post.originalPost.author?.name}
+            </small>
+            <p className="mb-2">{post.originalPost.content}</p>
+            {post.originalPost.images && post.originalPost.images.length > 0 && (
+              <img
+                src={`/uploads/${post.originalPost.images[0]}`}
+                alt="Original post"
+                className="img-fluid rounded"
+                style={{ maxHeight: '200px', width: '100%', objectFit: 'cover' }}
+              />
+            )}
+          </div>
+        )}
 
         {/* Post Stats */}
         <div className="d-flex align-items-center mb-3">
           <small className="text-muted me-3">
-            <span className="me-1">👁️</span>
+            <EyeIcon className="me-1" style={{width: '14px', height: '14px'}} />
             {Math.floor(Math.random() * 100) + 10} views
           </small>
           <small className="text-muted">
-            <span className="me-1">📊</span>
-            {Math.floor(Math.random() * 50) + 5} shares
+            <ShareIcon className="me-1" style={{width: '14px', height: '14px'}} />
+            {post.shareCount || 0} shares
           </small>
         </div>
 
@@ -171,10 +242,12 @@ const Post = ({ post, onDelete, onUpdate }) => {
             </button>
 
             <button
+              onClick={handleSharePost}
+              disabled={!isAuthenticated}
               className="btn btn-link d-flex align-items-center text-muted p-0 hover-scale"
               title="Share"
             >
-              <span className="me-1">📤</span>
+              <ShareIcon className="me-1" style={{width: '22px', height: '22px'}} />
               <span className="fw-medium">Share</span>
             </button>
           </div>
